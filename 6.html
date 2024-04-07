@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Test de 5 preguntas</h1>
+    <div id="questions">
+    </div>
+    <div id="result" class="hidden"></div>
+    <script>
+        const questions = [
+            { question: "¿En qué país nació Cristobal Colón?", answer: "Italia" },
+            { question: "¿Donde se celebró el mundial de fútbol en 2018?", answer: "Rusia" },
+            { question: "¿Quién escribió 'Don Quijote de la Mancha'?", answer: "Miguel de Cervantes" },
+            { question: "¿Cuantos huesos tiene el ser humano?", answer: "206" },
+            { question: "¿Cuál es el país más pequeño del mundo?", answer: "El Vaticano" }
+        ];
+
+        let timeLeft = 120; 
+        let timer;
+
+        function generateQuestions() {
+            const questionsContainer = document.getElementById('questions');
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.innerHTML = `
+                    <p>${index + 1}. ${q.question}</p>
+                    <input type="text" id="answer${index}">
+                `;
+                questionsContainer.appendChild(questionDiv);
+            });
+        }
+
+        function checkAnswers() {
+            let correctCount = 0;
+            questions.forEach((q, index) => {
+                const userAnswer = document.getElementById(`answer${index}`).value.trim();
+                if (userAnswer.toLowerCase() === q.answer.toLowerCase()) {
+                    correctCount++;
+                    document.getElementById(`answer${index}`).style.backgroundColor = 'lightgreen';
+                } else {
+                    document.getElementById(`answer${index}`).style.backgroundColor = 'lightcoral';
+                }
+            });
+            document.getElementById('result').innerHTML = `Respuestas correctas: ${correctCount} / 5`;
+            document.getElementById('result').classList.remove('hidden');
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                document.getElementById('timer').innerText = `Tiempo restante: ${timeLeft--} segundos`;
+                if (timeLeft < 0) {
+                    clearInterval(timer);
+                    checkAnswers();
+                }
+            }, 1000);
+        }
+
+        window.onload = function() {
+            generateQuestions();
+            startTimer();
+        };
+    </script>
+    <div id="timer">Tiempo restante: 120 segundos</div>
+    <button onclick="checkAnswers()">Terminar Test</button>
+    <a href="index.html" ; style="text-align: right;">
+        <h1>Volver a la web</h1>
+    </a>
+</body>
+</html>
